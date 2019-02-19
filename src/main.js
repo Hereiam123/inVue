@@ -8,10 +8,14 @@ const fb = require("./firebaseConfig.js");
 
 Vue.config.productionTip = false;
 
-/* eslint-disable no-new */
-new Vue({
-  el: "#app",
-  router,
-  components: { App },
-  template: "<App/>"
+let app;
+fb.auth.onAuthStateChanged(user => {
+  if (!app) {
+    app = new Vue({
+      el: "#app",
+      router,
+      store,
+      render: h => h(App)
+    });
+  }
 });
