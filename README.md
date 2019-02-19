@@ -1,10 +1,10 @@
-# invuew
+# invue
 
 > An instagram-like clone built using Vue, VueX and Firebase
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 
