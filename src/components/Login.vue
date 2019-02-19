@@ -7,7 +7,7 @@
     </transition>
     <section>
       <div class="col1">
-        <h1>Vuegram</h1>
+        <h1>inVue</h1>
       </div>
       <div class="col2" :class="{ 'signup-form': !showLoginForm && !showForgotPassword }">
         <form v-if="showLoginForm" @submit.prevent>
