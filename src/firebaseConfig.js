@@ -1,6 +1,6 @@
 import firebase from "firebase";
 import "firebase/firestore";
-import firebaseKeys from "../firebaseKeys";
+import firebaseKeys from "./firebaseKeys";
 
 // firebase init goes here
 const config = {
