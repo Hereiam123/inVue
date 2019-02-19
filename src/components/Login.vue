@@ -35,7 +35,7 @@
           <h1>Get Started</h1>
 
           <label for="name">Name</label>
-          <input v-model.trim="signupForm.name" type="text" placeholder="Savvy Apps" id="name">
+          <input v-model.trim="signupForm.name" type="text" placeholder="inVue name" id="name">
           
           <label for="title">Title</label>
           <input v-model.trim="signupForm.title" type="text" placeholder="Company" id="title">
@@ -144,8 +144,8 @@ export default {
           this.loginForm.email,
           this.loginForm.password
         )
-        .then(user => {
-          this.$store.commit("setCurrentUser", user);
+        .then(credential => {
+          this.$store.commit("setCurrentUser", credential.user);
           this.$store.dispatch("fetchUserProfile");
           this.performingRequest = false;
           this.$router.push("/dashboard");
@@ -163,12 +163,14 @@ export default {
           this.signupForm.email,
           this.signupForm.password
         )
-        .then(user => {
-          this.$store.commit("setCurrentUser", user);
+        .then(credential => {
+          // CHANGED
+          this.$store.commit("setCurrentUser", credential.user); // CHANGED
           // create user obj
           fb.usersCollection
-            .doc(user.uid)
+            .doc(credential.user.uid)
             .set({
+              //CHANGED
               name: this.signupForm.name,
               title: this.signupForm.title
             })
