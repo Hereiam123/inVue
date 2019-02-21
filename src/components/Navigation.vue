@@ -13,7 +13,7 @@
             <router-link to="settings">Settings</router-link>
           </li>
           <li>
-            <a @click="logout">logout</a>
+            <a @click="logout">Logout</a>
           </li>
         </ul>
       </div>
