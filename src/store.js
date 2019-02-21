@@ -6,6 +6,9 @@ Vue.use(Vuex);
 
 fb.auth.onAuthStateChanged(user => {
   if (user) {
+    fb.usersCollection.doc(user.uid).onSnapshot(doc => {
+      store.commit("setUserProfile", doc.data());
+    });
     store.commit("setCurrentUser", user);
     store.dispatch("fetchUserProfile");
     fb.postsCollection
@@ -66,6 +69,41 @@ export const store = new Vuex.Store({
       commit("setUserProfile", {});
       commit("setPosts", null);
       commit("setHiddenPosts", null);
+    },
+    updateProfile({ commit, state }, data) {
+      let name = data.name;
+      let title = data.title;
+
+      fb.usersCollection
+        .doc(state.currentUser.uid)
+        .update({ name, title })
+        .then(user => {
+          // update all posts by user to reflect new name
+          fb.postsCollection
+            .where("userId", "==", state.currentUser.uid)
+            .get()
+            .then(docs => {
+              docs.forEach(doc => {
+                fb.postsCollection.doc(doc.id).update({
+                  userName: name
+                });
+              });
+            });
+          // update all comments by user to reflect new name
+          fb.commentsCollection
+            .where("userId", "==", state.currentUser.uid)
+            .get()
+            .then(docs => {
+              docs.forEach(doc => {
+                fb.commentsCollection.doc(doc.id).update({
+                  userName: name
+                });
+              });
+            });
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   mutations: {
