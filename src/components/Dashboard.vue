@@ -16,7 +16,7 @@
       </div>
       <div class="col2">
         <div v-if="posts.length">
-          <div v-for="post in posts" class="post">
+          <div v-for="post in posts" class="post" v-bind:key="post.id">
             <h5>{{ post.userName }}</h5>
             <span>{{ post.createdOn | formatDate }}</span>
             <p>{{ post.content | trimLength }}</p>
