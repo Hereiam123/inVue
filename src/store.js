@@ -13,22 +13,24 @@ fb.auth.onAuthStateChanged(user => {
       .onSnapshot(querySnapshot => {
         // check if created by currentUser
         let createdByCurrentUser;
+        let changeData = querySnapshot.docChanges()[0];
         if (querySnapshot.docs.length) {
+          //let changeData = querySnapshot.docChanges()[0];
+          console.log(changeData.doc.data());
           createdByCurrentUser =
-            store.state.currentUser.uid ==
-            querySnapshot.docChanges[0].doc.data().userId
+            store.state.currentUser.uid == changeData.doc.data().userId
               ? true
               : false;
         }
 
         // add new posts to hiddenPosts array after initial load
         if (
-          querySnapshot.docChanges.length !== querySnapshot.docs.length &&
-          querySnapshot.docChanges[0].type == "added" &&
+          querySnapshot.docChanges().length !== querySnapshot.docs.length &&
+          changeData.type == "added" &&
           !createdByCurrentUser
         ) {
-          let post = querySnapshot.docChanges[0].doc.data();
-          post.id = querySnapshot.docChanges[0].doc.id;
+          let post = changeData.doc.data();
+          post.id = changeData.doc.id;
 
           store.commit("setHiddenPosts", post);
         } else {
