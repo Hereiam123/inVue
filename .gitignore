@@ -1,5 +1,6 @@
 .DS_Store
 node_modules/
+.firebase/
 firebaseKeys.js
 /dist/
 npm-debug.log*
