@@ -9,6 +9,7 @@
             <p>create a post</p>
             <form @submit.prevent>
               <textarea v-model.trim="post.content"></textarea>
+              <file-uploader/>
               <button @click="createPost" :disabled="post.content == ''" class="button">post</button>
             </form>
           </div>
@@ -102,6 +103,7 @@
 </template>
 
 <script>
+import FileUploader from "./FileUploader";
 import { mapState } from "vuex";
 import moment from "moment";
 const fb = require("../firebaseConfig.js");
@@ -123,6 +125,9 @@ export default {
       fullPost: {},
       postComments: []
     };
+  },
+  components: {
+    "file-uploader": FileUploader
   },
   computed: {
     ...mapState(["userProfile", "currentUser", "posts", "hiddenPosts"])
