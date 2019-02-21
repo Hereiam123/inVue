@@ -15,7 +15,6 @@ fb.auth.onAuthStateChanged(user => {
         let createdByCurrentUser;
         let changeData = querySnapshot.docChanges()[0];
         if (querySnapshot.docs.length) {
-          //let changeData = querySnapshot.docChanges()[0];
           console.log(changeData.doc.data());
           createdByCurrentUser =
             store.state.currentUser.uid == changeData.doc.data().userId
