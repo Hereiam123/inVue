@@ -47,7 +47,7 @@ fb.auth.onAuthStateChanged(user => {
 });
 
 export const store = new Vuex.Store({
-  state: { currentUser: null, userProfile: {}, posts: [] },
+  state: { currentUser: null, userProfile: {}, posts: [], hiddenPosts: [] },
   actions: {
     fetchUserProfile({ commit, state }) {
       fb.usersCollection
