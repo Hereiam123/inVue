@@ -32,6 +32,7 @@
 
 <script>
 import { mapState } from "vuex";
+import moment from "moment";
 const fb = require("../firebaseConfig.js");
 
 export default {
@@ -44,6 +45,21 @@ export default {
   },
   computed: {
     ...mapState(["userProfile", "currentUser", "posts"])
+  },
+  filters: {
+    formatDate(val) {
+      if (!val) {
+        return "-";
+      }
+      let date = val.toDate();
+      return moment(date).fromNow();
+    },
+    trimLength(val) {
+      if (val.length < 200) {
+        return val;
+      }
+      return `${val.substring(0, 200)}...`;
+    }
   },
   methods: {
     createPost() {
