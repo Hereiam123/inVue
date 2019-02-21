@@ -9,7 +9,7 @@
             <p>create a post</p>
             <form @submit.prevent>
               <textarea v-model.trim="post.content"></textarea>
-              <file-uploader/>
+              <file-uploader post-id="post-id"/>
               <button @click="createPost" :disabled="post.content == ''" class="button">post</button>
             </form>
           </div>

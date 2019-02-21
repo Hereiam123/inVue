@@ -8,6 +8,7 @@
 <script>
 const { storage } = require("../firebaseConfig.js");
 export default {
+  props: ["post-id"],
   data() {
     return {
       progressUpload: 0,
@@ -22,7 +23,7 @@ export default {
       });
     },
     upload(file) {
-      this.uploadTask = storage.ref("imagenes").put(file);
+      this.uploadTask = storage.ref(post - id).put(file);
     }
   },
   watch: {
