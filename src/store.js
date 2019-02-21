@@ -8,11 +8,22 @@ fb.auth.onAuthStateChanged(user => {
   if (user) {
     store.commit("setCurrentUser", user);
     store.dispatch("fetchUserProfile");
+    fb.postsCollection
+      .orderBy("createdOn", "desc")
+      .onSnapshot(querySnapshot => {
+        let postArray = [];
+        querySnapshot.forEach(doc => {
+          let post = doc.data();
+          post.id = doc.id;
+          postArray.push(post);
+        });
+        store.commit("setPosts", postArray);
+      });
   }
 });
 
 export const store = new Vuex.Store({
-  state: { currentUser: null, userProfile: {} },
+  state: { currentUser: null, userProfile: {}, posts: [] },
   actions: {
     fetchUserProfile({ commit, state }) {
       fb.usersCollection
