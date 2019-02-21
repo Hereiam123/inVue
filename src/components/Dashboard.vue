@@ -31,6 +31,17 @@
             <h5>{{ post.userName }}</h5>
             <span>{{ post.createdOn | formatDate }}</span>
             <p>{{ post.content | trimLength }}</p>
+            <ul>
+              <li>
+                <a>comments {{ post.comments }}</a>
+              </li>
+              <li>
+                <a>likes {{ post.likes }}</a>
+              </li>
+              <li>
+                <a>view full post</a>
+              </li>
+            </ul>
           </div>
         </div>
         <div v-else>
