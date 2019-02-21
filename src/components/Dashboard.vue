@@ -29,11 +29,33 @@ const fb = require("../firebaseConfig.js");
 
 export default {
   data() {
-    return {};
+    return {
+      post: {
+        content: ""
+      }
+    };
   },
   computed: {
     ...mapState(["userProfile"])
   },
-  methods: {}
+  methods: {
+    createPost() {
+      fb.postsCollection
+        .add({
+          createdOn: new Date(),
+          content: this.post.content,
+          userId: this.currentUser.uid,
+          userName: this.userProfile.name,
+          comments: 0,
+          likes: 0
+        })
+        .then(ref => {
+          this.post.content = "";
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }
 };
 </script>
