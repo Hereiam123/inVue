@@ -8,8 +8,8 @@
           <div class="create-post">
             <p>create a post</p>
             <form @submit.prevent>
-              <textarea></textarea>
-              <button class="button">post</button>
+              <textarea v-model.trim="post.content"></textarea>
+              <button @click="createPost" :disabled="post.content == ''" class="button">post</button>
             </form>
           </div>
         </div>
@@ -36,7 +36,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["userProfile"])
+    ...mapState(["userProfile", "currentUser"])
   },
   methods: {
     createPost() {
