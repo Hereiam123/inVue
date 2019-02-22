@@ -9,6 +9,7 @@
             <p>create a post</p>
             <form @submit.prevent>
               <textarea v-model.trim="post.content"></textarea>
+              <input type="file" @change="onFileSelected">
               <button @click="createPost" :disabled="post.content == ''" class="button">post</button>
             </form>
           </div>
@@ -121,7 +122,8 @@ export default {
       showCommentModal: false,
       showPostModal: false,
       fullPost: {},
-      postComments: []
+      postComments: [],
+      selectedFile: null
     };
   },
   computed: {
@@ -144,6 +146,9 @@ export default {
   },
   methods: {
     createPost() {
+      if (this.selectedFile) {
+        this.upload(this.selectedFile);
+      }
       fb.postsCollection
         .add({
           createdOn: new Date(),
@@ -151,7 +156,8 @@ export default {
           userId: this.currentUser.uid,
           userName: this.userProfile.name,
           comments: 0,
-          likes: 0
+          likes: 0,
+          imageUrl: this.downloadURL
         })
         .then(ref => {
           this.post.content = "";
@@ -255,6 +261,30 @@ export default {
     closePostModal() {
       this.postComments = [];
       this.showPostModal = false;
+    },
+    onFileSelected(event) {
+      this.selectedFile = event.target.files[0];
+    },
+    upload(file) {
+      this.uploadTask = fb.storage.ref(this.selectedFile.name).put(file);
+    }
+  },
+  watch: {
+    uploadTask: function() {
+      this.uploadTask.on(
+        "state_changed",
+        sp => {
+          this.progressUpload = Math.floor(
+            (sp.bytesTransferred / sp.totalBytes) * 100
+          );
+        },
+        null,
+        () => {
+          this.uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+            this.$emit("url", downloadURL);
+          });
+        }
+      );
     }
   }
 };
