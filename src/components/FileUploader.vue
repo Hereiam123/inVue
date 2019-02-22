@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input type="file" multiple accept="image/jpeg" @change="detectFiles($event.target.files)">
+    <input type="file" accept="image/jpeg" @change="detectFiles($event.target.files)">
     <div class="progress-bar" :style="{ width: progressUpload + '%'}">{{ progressUpload }}%</div>
   </div>
 </template>
@@ -17,13 +17,11 @@ export default {
     };
   },
   methods: {
-    detectFiles(fileList) {
-      Array.from(Array(fileList.length).keys()).map(x => {
-        this.upload(fileList[x]);
-      });
+    detectFiles(file) {
+      this.upload(file);
     },
     upload(file) {
-      this.uploadTask = storage.ref(post - id).put(file);
+      this.uploadTask = storage.ref(post.id).put(file);
     }
   },
   watch: {
