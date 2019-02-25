@@ -46,10 +46,12 @@ router.beforeEach((to, from, next) => {
     next("/login");
   } else if (currentUser && to.name == "Login") {
     router.push({ name: "Dashboard" });
-    next();
+    next("/dashboard");
   } else if (requiresAuth && currentUser) {
     next();
   } else {
     next();
   }
 });
+
+export default router;
