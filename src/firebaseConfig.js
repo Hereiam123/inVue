@@ -1,5 +1,6 @@
 import firebase from "firebase";
 import "firebase/firestore";
+
 import firebaseKeys from "./firebaseKeys";
 
 // firebase init goes here
@@ -12,6 +13,7 @@ const config = {
   messagingSenderId: firebaseKeys.messagingSenderId
 };
 firebase.initializeApp(config);
+const storage = firebase.storage();
 
 // firebase utils
 const db = firebase.firestore();
@@ -31,5 +33,6 @@ export {
   usersCollection,
   postsCollection,
   commentsCollection,
-  likesCollection
+  likesCollection,
+  storage
 };
