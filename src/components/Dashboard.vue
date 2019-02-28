@@ -20,7 +20,7 @@
               <span id="file-selected" v-if="this.selectedFile">{{this.selectedFile.name}}</span>
               <button
                 @click="createPost"
-                :disabled="post.content == '' || (checkFiles())"
+                :disabled="post.content == '' || (this.selectedFile !==null ? !checkFiles() : false)"
                 class="button"
               >post</button>
             </form>
@@ -163,11 +163,16 @@ export default {
       if (this.selectedFile !== null) {
         let type = this.selectedFile.name.split(".")[1];
         console.log(type);
-        if (type == "jpg" || type == "jpeg" || type == "jpg") {
-          return false;
+        if (
+          type == "jpg" ||
+          type == "jpeg" ||
+          type == "png" ||
+          type == undefined
+        ) {
+          return true;
         }
       }
-      return true;
+      return false;
     },
     createPost() {
       if (this.selectedFile) {
