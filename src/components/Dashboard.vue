@@ -9,7 +9,14 @@
             <p>create a post</p>
             <form @submit.prevent>
               <textarea v-model.trim="post.content"></textarea>
-              <input type="file" @change="onFileSelected">
+              <p>Upload and Image!</p>
+              <p>Only accepts png or jpeg</p>
+              <div class="upload-btn-wrapper">
+                <label class="custom-file-upload">
+                  <input type="file" @change="onFileSelected" accept=".png, .jpg, .jpeg">
+                  Upload Image
+                </label>
+              </div>
               <button @click="createPost" :disabled="post.content == ''" class="button">post</button>
             </form>
           </div>
@@ -31,6 +38,7 @@
           <div v-for="post in posts" class="post" v-bind:key="post.id">
             <h5>{{ post.userName }}</h5>
             <span>{{ post.createdOn | formatDate }}</span>
+            <img :src="post.imageUrl" v-if="post.imageUrl != undefined">
             <p>{{ post.content | trimLength }}</p>
             <ul>
               <li>
@@ -66,6 +74,7 @@
                       <div class="post">
                         <h5>{{ fullPost.userName }}</h5>
                         <span>{{ fullPost.createdOn | formatDate }}</span>
+                        <img :src="fullPost.imageUrl" v-if="fullPost.imageUrl != undefined">
                         <p>{{ fullPost.content }}</p>
                         <ul>
                           <li>
@@ -148,23 +157,23 @@ export default {
     createPost() {
       if (this.selectedFile) {
         this.upload(this.selectedFile);
+      } else {
+        fb.postsCollection
+          .add({
+            createdOn: new Date(),
+            content: this.post.content,
+            userId: this.currentUser.uid,
+            userName: this.userProfile.name,
+            comments: 0,
+            likes: 0
+          })
+          .then(ref => {
+            this.post.content = "";
+          })
+          .catch(err => {
+            console.log(err);
+          });
       }
-      fb.postsCollection
-        .add({
-          createdOn: new Date(),
-          content: this.post.content,
-          userId: this.currentUser.uid,
-          userName: this.userProfile.name,
-          comments: 0,
-          likes: 0,
-          imageUrl: this.downloadURL
-        })
-        .then(ref => {
-          this.post.content = "";
-        })
-        .catch(err => {
-          console.log(err);
-        });
     },
     showNewPosts() {
       let updatedPostsArray = this.hiddenPosts.concat(this.posts);
@@ -267,10 +276,6 @@ export default {
     },
     upload(file) {
       this.uploadTask = fb.storage.ref(this.selectedFile.name).put(file);
-    }
-  },
-  watch: {
-    uploadTask: function() {
       this.uploadTask.on(
         "state_changed",
         sp => {
@@ -281,7 +286,22 @@ export default {
         null,
         () => {
           this.uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
-            this.$emit("url", downloadURL);
+            fb.postsCollection
+              .add({
+                createdOn: new Date(),
+                content: this.post.content,
+                userId: this.currentUser.uid,
+                userName: this.userProfile.name,
+                comments: 0,
+                likes: 0,
+                imageUrl: downloadURL
+              })
+              .then(ref => {
+                this.post.content = "";
+              })
+              .catch(err => {
+                console.log(err);
+              });
           });
         }
       );

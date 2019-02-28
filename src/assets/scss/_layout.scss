@@ -144,6 +144,22 @@ header {
       height: 200px;
       margin: 0;
     }
+    .custom-file-upload {
+      border: 2px solid gray;
+      color: gray;
+      background-color: white;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 20px;
+      font-weight: bold;
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      cursor: pointer;
+    }
+    input[type="file"] {
+      display: none;
+    }
     .button {
       margin-top: 1rem;
       width: 100%;
@@ -185,6 +201,11 @@ header {
 
     &:last-of-type {
       border-bottom: 1px solid $light;
+    }
+
+    img {
+      height: 300px;
+      width: auto;
     }
 
     h5 {
