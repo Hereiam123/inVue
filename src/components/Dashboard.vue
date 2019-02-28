@@ -9,7 +9,7 @@
             <p>create a post</p>
             <form @submit.prevent>
               <textarea v-model.trim="post.content"></textarea>
-              <p>Upload and Image!</p>
+              <p>Upload an Image with Your Post!</p>
               <p>Only accepts png or jpeg</p>
               <div class="upload-btn-wrapper">
                 <label class="custom-file-upload">
@@ -17,7 +17,12 @@
                   Upload Image
                 </label>
               </div>
-              <button @click="createPost" :disabled="post.content == ''" class="button">post</button>
+              <span id="file-selected" v-if="this.selectedFile">{{this.selectedFile.name}}</span>
+              <button
+                @click="createPost"
+                :disabled="post.content == '' || (checkFiles())"
+                class="button"
+              >post</button>
             </form>
           </div>
         </div>
@@ -154,6 +159,16 @@ export default {
     }
   },
   methods: {
+    checkFiles() {
+      if (this.selectedFile !== null) {
+        let type = this.selectedFile.name.split(".")[1];
+        console.log(type);
+        if (type == "jpg" || type == "jpeg" || type == "jpg") {
+          return false;
+        }
+      }
+      return true;
+    },
     createPost() {
       if (this.selectedFile) {
         this.upload(this.selectedFile);
